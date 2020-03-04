@@ -21,13 +21,10 @@
                         lista3.append(todasAsArestas[y][y1])
                 vizinhosT.append(lista2)
                 todasAsArestasT.append(lista3)
-            # self.percorrerDFS(raiz, lista, VertcisPercorridos, todasAsArestas, '0')
-            # self.percorrerDFS2(raiz, vizinhosT, todasAsArestasT,VertcisPercorridos,'0')
             pais.append(raiz)
             VertcisPercorridos.append(raiz)
-            # self.percorrerDFS3(raiz, vizinhosT, todasAsArestasT, VertcisPercorridos, pais)
-            self.percorrerDFS4(raiz, vizinhosT, todasAsArestasT, VertcisPercorridos, pais)
-        return 1
+            x = self.percorrerDFS4(raiz, vizinhosT, todasAsArestasT, VertcisPercorridos, pais)
+        return x
 
 
     def percorrerDFS4(self, raiz, vizinho, todasAsArestas, pecorrido, pais):
