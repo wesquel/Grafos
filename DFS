@@ -1,69 +1,45 @@
-    def DFS(self, raiz):
-        if self.verticeValido(raiz):
-            vertices = self.N
-            arestas = self.A
-            todasAsArestas = []
-            vizinhos = []
-            VertcisPercorridos = []
-            vizinhosT = []
-            todasAsArestasT = []
-            pais = []
-            lista = list(self.A.items())
-            for x in range(len(vertices)):
-                vizinhos.append(self.vizinhos_do_vertice(vertices[x]))
-                todasAsArestas.append(self.arestas_sobre_vertice(vertices[x]))
-            for y in range(len(vizinhos)):
-                lista2 = []
-                lista3 = []
-                for y1 in range(len(vizinhos[y])):
-                    if vizinhos[y][y1] not in lista2:
-                        lista2.append(vizinhos[y][y1])
-                        lista3.append(todasAsArestas[y][y1])
-                vizinhosT.append(lista2)
-                todasAsArestasT.append(lista3)
-            pais.append(raiz)
-            VertcisPercorridos.append(raiz)
-            x = self.percorrerDFS4(raiz, vizinhosT, todasAsArestasT, VertcisPercorridos, pais)
-        return x
 
+    def aresta_entre_vertices(self, aresta):
+        for c in range(len(self.A)):
+            a = list(self.A.items())[c][1]
+            a_inverso = a[2]+'-'+a[0]
+            if aresta == a:
+                return list(self.A.items())[c][0]
+            elif aresta == a_inverso:
+                return list(self.A.items())[c][0]
 
-    def percorrerDFS4(self, raiz, vizinho, todasAsArestas, pecorrido, pais):
-        raiz1 = raiz
-        for x in range(len(self.N)):
-            if self.N[x] == raiz:
-                if len(vizinho[x]) != 0:
-                    if vizinho[x][0] not in pecorrido:
-                        pais.append(vizinho[x][0])
-                        pecorrido.append(todasAsArestas[x][0])
-                        pecorrido.append(vizinho[x][0])
-                    raiz1 = vizinho[x][0]
-                    vizinho[x].pop(0)
-                    todasAsArestas[x].pop(0)
-                    print(raiz)
-                    print(self.N)
-                    print(vizinho)
-                    print(todasAsArestas)
-                    print(pecorrido)
-                    print(pais)
-
-                else:
-                    raiz1 = pais[len(pais) - 1]
-                    che = False
-                    for x in range(len(todasAsArestas)):
-                        if len(todasAsArestas[x]) > 0:
-                            che = True
-                            break
-                    if not che:
-                        return pecorrido
-
-        return self.percorrerDFS4(raiz1, vizinho, todasAsArestas, pecorrido, pais)
 
     def vizinhos_do_vertice(self, vertice):
         vizinhos = []
         for t in range(len(self.A)):
-            arestas = list(self.A.items())[t][1]
-            if arestas[0] == vertice:
-                vizinhos.append(arestas[2])
-            elif arestas[2] == vertice:
+            arestas = list(self.A.items())[t][1].split('-')
+            if arestas[0] == vertice and arestas[1] not in vizinhos:
+                vizinhos.append(arestas[1])
+            elif arestas[1] == vertice and arestas[0] not in vizinhos:
                 vizinhos.append(arestas[0])
         return vizinhos
+
+    def dfs_recursiva(grafo, vertice, visitados):
+        visitados.append(vertice)
+        for vizinho in grafo.vizinhos_do_vertice(vertice):
+            if vizinho not in visitados:
+                for t in range(len(grafo.A)):
+                    item = list(grafo.A.items())[t][1].split('-')
+                    if item[0] == vertice and list(grafo.A.items())[t][0] not in visitados:
+                        s1 = item[0]+'-'+vizinho
+                        visitados.append(grafo.aresta_entre_vertices(s1))
+                        break
+                    elif item[1] == vertice and list(grafo.A.items())[t][0] not in visitados:
+                        s2 = item[1] + '-' + vizinho
+                        visitados.append(grafo.aresta_entre_vertices(s2))
+                        break
+                grafo.dfs_recursiva(vizinho, visitados)
+
+    def dfs(grafo, vertice):
+        visitados = []
+        arestas = grafo.A.items()
+        grafo.dfs_recursiva(vertice, visitados)
+        for x in grafo.N:
+            if x not in visitados:
+                return -1
+        return visitados
