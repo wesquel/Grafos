@@ -128,9 +128,9 @@ class TestGrafo(unittest.TestCase):
         self.assertTrue(self.g_l1.ha_paralelas())
 
     def test_arestas_sobre_vertice(self):
-        self.assertEqual(set(self.g_p.arestas_sobre_vertice('J')), set(['a1']))
-        self.assertEqual(set(self.g_p.arestas_sobre_vertice('C')), set(['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7']))
-        self.assertEqual(set(self.g_p.arestas_sobre_vertice('M')), set(['a6', 'a8']))
+        self.assertEqual(set(self.g_p.arestas_sobre_vertice('J')), {'a1'})
+        self.assertEqual(set(self.g_p.arestas_sobre_vertice('C')), {'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7'})
+        self.assertEqual(set(self.g_p.arestas_sobre_vertice('M')), {'a6', 'a8'})
 
     def test_eh_completo(self):
         self.assertFalse(self.g_p.eh_completo())
@@ -146,28 +146,29 @@ class TestGrafo(unittest.TestCase):
 
     def test_dfs(self):
         self.assertEqual(set(self.g1.dfs('J')),
-                         set(['J', 'a1', 'C', 'a2', 'E', 'a4', 'P', 'a6', 'M', 'a8', 'T', 'a9', 'Z']))
+                         {'J', 'a1', 'C', 'a2', 'E', 'a4', 'P', 'a6', 'M', 'a8', 'T', 'a9', 'Z'})
         self.assertEqual(set(self.g2.dfs('K')),
-                         set(['K', '4', 'G', '2', 'A', '1', 'B', '11', 'F', '10', 'H', '13', 'C', '14', 'D', '15', 'E',
-                              '3', 'J', '7', 'I']))
+                         {'K', '4', 'G', '2', 'A', '1', 'B', '11', 'F', '10', 'H', '13', 'C', '14', 'D', '15', 'E', '3',
+                          'J', '7', 'I'})
         self.assertEqual(set(self.g3.dfs('A')),
-                         set(['A', '1', 'B', '3', 'C']))
+                         {'A', '1', 'B', '3', 'C'})
         self.assertEqual(set(self.g4.dfs('C')),
-                         set(['C', 'a2', 'B', 'a1', 'A']))
+                         {'C', 'a2', 'B', 'a1', 'A'})
         self.assertEqual(self.g5.dfs('A'), -1)
         self.assertEqual(set(self.g6.dfs('A')),
-                         set(['A', 'a1', 'D', 'a3', 'B', 'a4', 'E', 'a6', 'C']))
+                         {'A', 'a1', 'D', 'a3', 'B', 'a4', 'E', 'a6', 'C'})
         self.assertEqual(set(self.g7.dfs('A')),
-                         set(['A', 'a1', 'B', 'a2', 'C', 'a3', 'D', 'a4', 'E', 'a7', 'G', 'a8', 'F']))
+                         {'A', 'a1', 'B', 'a2', 'C', 'a3', 'D', 'a4', 'E', 'a7', 'G', 'a8', 'F'})
         self.assertEqual(set(self.g8.dfs('EEE')),
-                         set(['EEE', 'a4', 'AAA', 'a1', 'BBB', 'a2', 'CCC', 'a3', 'DDD', 'a5', 'FFF', 'a6', 'GGG']))
+                         {'EEE', 'a4', 'AAA', 'a1', 'BBB', 'a2', 'CCC', 'a3', 'DDD', 'a5', 'FFF', 'a6', 'GGG'})
         self.assertEqual(set(self.g9.dfs('V1')),
-                         set(['V1', 'a1', 'V2', 'a4', 'V3', 'a7', 'V5', 'a8', 'V4']))
+                         {'V1', 'a1', 'V2', 'a4', 'V3', 'a7', 'V5', 'a8', 'V4'})
         self.assertEqual(set(self.g10.dfs('B')),
-                         set(['B', 'a1', 'C', 'a2', 'D', 'a3', 'E', 'a4', 'I', 'a5', 'M', 'a6', 'L', 'a7', 'H', 'a8', 'A', 'a9', 'F', 'a10', 'J', 'a11', 'K', 'a12', 'G']))
+                         {'B', 'a1', 'C', 'a2', 'D', 'a3', 'E', 'a4', 'I', 'a5', 'M', 'a6', 'L', 'a7', 'H', 'a8', 'A',
+                          'a9', 'F', 'a10', 'J', 'a11', 'K', 'a12', 'G'})
         self.assertEqual(self.g11.dfs('A'), -1)
-        self.assertEqual(set(self.g12.dfs('L')),set(['L', '3', 'J', '2', 'H', '1', 'K']))
+        self.assertEqual(set(self.g12.dfs('L')), {'L', '3', 'J', '2', 'H', '1', 'K'})
         self.assertEqual(set(self.g13.dfs('V2')),
-                         set(['V2', 'a1', 'V1', 'a4', 'V4', 'a3', 'V3']))
+                         {'V2', 'a1', 'V1', 'a4', 'V4', 'a3', 'V3'})
         self.assertEqual(set(self.g14.dfs('V4')),
-                         set(['V4', 'a3', 'V3', 'a2', 'V2', 'a1', 'V1', 'a5', 'V5']))
+                         {'V4', 'a3', 'V3', 'a2', 'V2', 'a1', 'V1', 'a5', 'V5'})

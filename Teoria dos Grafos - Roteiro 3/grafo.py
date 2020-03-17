@@ -208,16 +208,17 @@ class Grafo:
         else:
             return False
 
-    def aresta_entre_vertices(self, aresta):
+    def arestas_entre_vertices(self, aresta):
+        arestas = []
         for c in range(len(self.A)):
             item = list(self.A.items())[c][1].split('-')
-            a = item[0]+"-"+item[1]
-            a_inverso = item[1]+"-"+item[0]
+            a = item[0] + "-" + item[1]
+            a_inverso = item[1] + "-" + item[0]
             if aresta == a:
-                return list(self.A.items())[c][0]
+                arestas.append(list(self.A.items())[c][0])
             elif aresta == a_inverso:
-                return list(self.A.items())[c][0]
-
+                arestas.append(list(self.A.items())[c][0])
+        return arestas
 
     def vizinhos_do_vertice(self, vertice):
         vizinhos = []
@@ -237,11 +238,11 @@ class Grafo:
                     item = list(grafo.A.items())[t][1].split('-')
                     if item[0] == vertice and list(grafo.A.items())[t][0] not in visitados:
                         s1 = item[0] + '-' + vizinho
-                        visitados.append(grafo.aresta_entre_vertices(s1))
+                        visitados.append(grafo.arestas_entre_vertices(s1)[0])
                         break
                     elif item[1] == vertice and list(grafo.A.items())[t][0] not in visitados:
                         s2 = item[1] + '-' + vizinho
-                        visitados.append(grafo.aresta_entre_vertices(s2))
+                        visitados.append(grafo.arestas_entre_vertices(s2)[0])
                         break
                 grafo.dfs_recursiva(vizinho, visitados)
 
@@ -255,75 +256,82 @@ class Grafo:
         return visitados
 
     def conexo(self):
-       if self.dfs(self.N[0]) == -1:
-           return False
-       return True
+        if self.dfs(self.N[0]) == -1:
+            return False
+        return True
 
-    def caminho(self,n):
+    def caminho(self, n):
         dfs = self.dfs(self.N[0])
         if n == 0:
             return []
-        elif (dfs != -1) and (len(dfs) >= (n*2)+1):
-            return dfs[:n*2+1]
+        elif (dfs != -1) and (len(dfs) >= (n * 2) + 1):
+            return dfs[:n * 2 + 1]
         return -1
 
     def ha_ciclo(grafo):
         visitados = []
         vertice = grafo.N[0]
         passado = []
-        if grafo.ha_paralelas() == True:
+        # Se ja existe PARALELAS a função ja retorna o ciclo entre elas
+        if grafo.ha_paralelas():
             for t in range(len(grafo.A)):
                 cont = 0
                 item1 = list(grafo.A.items())[t][1]
                 for v in range(len(grafo.A)):
                     item2 = list(grafo.A.items())[v][1]
-                    if (item1 == item2):
+                    visitados = []
+                    if item1 == item2:
                         cont = cont + 1
                         if cont == 2:
                             item = item2.split('-')
                             visitados.append(item[0])
-                            visitados.append(grafo.aresta_entre_vertices(item[0]+"-"+item[1]))
+                            visitados.append(grafo.arestas_entre_vertices(item[0] + "-" + item[1])[0])
                             visitados.append(item[1])
+                            visitados.append(grafo.arestas_entre_vertices(item[0] + "-" + item[1])[1])
+                            visitados.append(item[0])
                             return visitados
-            return visitados
         visitados.append(vertice)
-        return grafo.percorrer_ciclo(vertice, visitados,passado)
-#
-    def percorrer_ciclo(grafo, vertice, visitados,passado):
-        ## Caso de parada para quando nao tiver ciclo
+        return grafo.percorrer_ciclo(vertice, visitados, passado)
+
+    def percorrer_ciclo(grafo, vertice, visitados, passado):
+        # Caso de parada Caso encontre TODOS os Vertices e não tenha o ciclo.
         if len(set(passado)) == len(grafo.N):
             return -1
+        # Força a trocar de vertice caso se repita.
+        if len(passado) >= 4:
+            if passado[-1] == passado[-3] and passado[-2] == passado[-4]:
+                for x in grafo.N:
+                    if x not in passado:
+                        visitados = []
+                        visitados.append(x)
+                        return grafo.percorrer_ciclo(x, visitados, passado[:len(passado) - 2])
+        # Appenda o passado agora.
         passado.append(vertice)
         Lvizinho = grafo.vizinhos_do_vertice(vertice)
         vizinho = Lvizinho[0]
+        # For para troca do vizinho ou parada caso ja tenha um ciclo
         for x in range(len(Lvizinho)):
-            #Caso de parada para o laço
-            if (Lvizinho[x] == vertice):
+            # Caso de parada se houver um laço, (Retorna o laço).
+            if Lvizinho[x] == vertice:
                 visitados = []
                 visitados.append(Lvizinho[x])
-                visitados.append(grafo.aresta_entre_vertices(Lvizinho[x] + "-" + vertice))
+                visitados.append(grafo.arestas_entre_vertices(Lvizinho[x] + "-" + vertice[0])[0])
                 visitados.append(Lvizinho[x])
                 return visitados
-            # Caso para quando acha outro vizinho possivel
+            # Caso o "vizinho" não estiver em "passado" ainda, a função chama ela mesma com o "vizinho" sendo o vertice.
             elif Lvizinho[x] not in passado:
                 vizinho = Lvizinho[x]
-                break
-            # Caso de parada para quando ja achar um ciclo
+                visitados.append(grafo.arestas_entre_vertices(vertice + "-" + vizinho)[0])
+                visitados.append(vizinho)
+                return grafo.percorrer_ciclo(vizinho, visitados, passado)
+            # Caso de parada se o vertice encontrado ja estive em "passado" e se ele nao estiver voltando.
+            # (Se ele ja estive em "passado" significa que ele encontrou a outra ponta dele)
+            # (Se o passado[-2] do for dirente dele significa que não estar voltando.)
             elif (Lvizinho[x] in passado) and (passado[-2] != Lvizinho[x]) and (len(visitados) > 1):
-                visitados.append(grafo.aresta_entre_vertices(Lvizinho[x] + "-" + vertice))
+                visitados.append(grafo.arestas_entre_vertices(Lvizinho[x] + "-" + vertice)[0])
                 visitados.append(Lvizinho[x])
                 return visitados
-        if vizinho in passado:
-            visitados = []
-            visitados.append(vizinho)
-            return grafo.percorrer_ciclo(vizinho, visitados, passado)
-        visitados.append(grafo.aresta_entre_vertices(vertice + "-" + vizinho))
+        # Caso nao Encontre nem um "vizinho" a função vai voltar para o anterior.
+        visitados = []
         visitados.append(vizinho)
-        return grafo.percorrer_ciclo(vizinho,visitados,passado)
-
-
-
-
-
-
-
+        return grafo.percorrer_ciclo(vizinho, visitados, passado)
