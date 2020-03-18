@@ -261,6 +261,8 @@ class Grafo:
         return True
 #n * 2 + 1
     def caminho(self, n):
+        if n == 0:
+            return []
         for x in self.N:
             dfs = self.dfs(x)
             caminho = []
@@ -273,7 +275,8 @@ class Grafo:
                         caminho.append(dfs[i+2])
                     else:
                         break
-            print(caminho)
+            if len(caminho) >= n * 2 + 1:
+                return caminho[:n*2+1]
 
 
 
