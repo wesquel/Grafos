@@ -23,6 +23,11 @@ g8 = Grafo(['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF', 'GGG'],
 g9 = Grafo(['V1', 'V2', 'V3', 'V4', 'V5'],
            {'a1': 'V1-V2', 'a2': 'V1-V3', 'a3': 'V1-V3', 'a4': 'V2-V3', 'a5': 'V2-V5', 'a6': 'V5-V5', 'a7': 'V5-V3',
             'a8': 'V3-V4'})  # grafo com paralelos
+
+g10 = Grafo(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'],
+                    {'a1': 'B-C', 'a2': 'C-D', 'a3': 'D-E', 'a4': 'E-I', 'a5': 'I-M', 'a6': 'I-L', 'a7': 'E-H',
+                     'a8': 'D-A', 'a9': 'A-F', 'a10': 'F-J', 'a11': 'F-K', 'a12': 'A-G'}) # Arvore
+
 g11 = Grafo(['A'], {'1': 'A-A'})  # Grafo com 1 só vertice, que em laço
 g12 = Grafo(['H', 'J', 'K', 'L'], {'1': 'H-K', '2': 'H-J', '3': 'J-L', '4': 'L-H', '5': 'L-K'})
 g13 = Grafo(['V1', 'V2', 'V3', 'V4'],
@@ -42,6 +47,10 @@ g21 = Grafo(('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'),
             {'a1': 'A-B', 'a2': 'A-C', 'a3': 'D-E', 'a4': 'E-F', 'a5': 'F-G', 'a7': 'A-H', 'a8': 'I-J', 'a9': 'J-K',
              'a10': 'K-I'})  # NÃO CONEXO EM 2 SUBGRAFOS E COM CICLO EM UM SUB GRAFO
 
+g_p = Grafo(['J', 'C', 'E', 'P', 'M', 'T', 'Z'],
+                         {'a1': 'J-C', 'a2': 'C-E', 'a3': 'C-E', 'a4': 'C-P', 'a5': 'C-P', 'a6': 'C-M', 'a7': 'C-T',
+                          'a8': 'M-T', 'a9': 'T-Z'})
+
 print("Grafo 1", g1.dfs('J'))
 print("Grafo 2", g2.dfs('K'))
 print("Grafo 3", g3.dfs('A'))
@@ -55,11 +64,25 @@ print("Grafo 11", g11.dfs("A"))
 print("Grafo 12", g12.dfs("L"))
 print("Grafo 13", g13.dfs("V2"))
 print("Grafo 14", g14.dfs("V4"))
-print("Conexo", g9.conexo())
-print("Conexo", g5.conexo())
-print("Caminho", g5.caminho(0))
-print("Caminho", g1.caminho(3))
-print("Caminho", g1.caminho(4))
-print(g1.ha_ciclo())
-print(g9.ha_ciclo())
+print("Conexo 1", g1.conexo())
+print("Conexo 2", g5.conexo())
+print("ciclo 1", g1.ha_ciclo())
+print("ciclo 2", g2.ha_ciclo())
+print("ciclo 3", g3.ha_ciclo())
+print("ciclo 4", g4.ha_ciclo())
+print("ciclo 5", g5.ha_ciclo())
+print("ciclo 6", g6.ha_ciclo())
+print("ciclo 7", g7.ha_ciclo())
+print("ciclo 8", g8.ha_ciclo())
+print("ciclo 9", g9.ha_ciclo())
+print("ciclo 10", g10.ha_ciclo())
+print("ciclo 15", g15.ha_ciclo())
+print("ciclo 17", g17.ha_ciclo())
+print("ciclo 18", g18.ha_ciclo())
+print("ciclo 19", g19.ha_ciclo())
+print("ciclo 20", g20.ha_ciclo())
+print("ciclo 21", g21.ha_ciclo())
+print("ciclo g_P", g_p.ha_ciclo())
+print("Caminho 1", g2.caminho(0))
+
 
