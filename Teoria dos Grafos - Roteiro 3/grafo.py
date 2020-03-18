@@ -259,14 +259,24 @@ class Grafo:
         if self.dfs(self.N[0]) == -1:
             return False
         return True
-
+#n * 2 + 1
     def caminho(self, n):
-        dfs = self.dfs(self.N[0])
-        if n == 0:
-            return []
-        elif (dfs != -1) and (len(dfs) >= (n * 2) + 1):
-            return dfs[:n * 2 + 1]
-        return -1
+        for x in self.N:
+            dfs = self.dfs(x)
+            caminho = []
+            cont = 0
+            caminho.append(dfs[0])
+            for i in range(len(dfs)-2):
+                if i % 2 == 0:
+                    if dfs[i+1] in self.arestas_entre_vertices(dfs[i] + "-" + dfs[i+2]):
+                        caminho.append(dfs[i+1])
+                        caminho.append(dfs[i+2])
+                    else:
+                        break
+            print(caminho)
+
+
+
 
     def ha_ciclo(grafo):
         visitados = []
