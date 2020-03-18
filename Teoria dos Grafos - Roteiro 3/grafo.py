@@ -259,7 +259,6 @@ class Grafo:
         if self.dfs(self.N[0]) == -1:
             return False
         return True
-#n * 2 + 1
     def caminho(self, n):
         if n == 0:
             return []
@@ -277,8 +276,7 @@ class Grafo:
                         break
             if len(caminho) >= n * 2 + 1:
                 return caminho[:n*2+1]
-
-
+        return -1
 
 
     def ha_ciclo(grafo):
