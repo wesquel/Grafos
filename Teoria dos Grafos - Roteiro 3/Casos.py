@@ -70,6 +70,24 @@ class TestGrafo(unittest.TestCase):
                     {'a1': 'V1-V2', 'a2': 'V2-V3', 'a3': 'V3-V4', 'a4': 'V4-V5', 'a5': 'V5-V1', 'a7': 'V1-V3',
                      'a8': 'V1-V4', 'a9': 'V2-V5', 'a10': 'V2-V4', 'a6': 'V5-V3'})  # k5
 
+        # Grafos Teste Ciclo.
+
+        self.g15 = Grafo(['A', 'B', 'C', 'D'],
+                    {'a0': 'D-A', 'a1': 'A-B', 'a2': 'B-C', 'a3': 'C-A'})  # Triangulo com uma ponta
+        self.g17 = Grafo(['A', 'B', 'C', 'D', 'E', 'F'],
+                    {'a0': 'D-A', 'a1': 'A-B', 'a2': 'B-C', 'a3': 'C-A', 'a4': 'D-E',
+                     'a5': 'D-F'})  # Triangulo com 2 pontas
+        self.g18 = Grafo(['A', 'B', 'C'],
+                    {'a1': 'A-B', 'a2': 'A-B', 'a3': 'A-C', 'a4': 'A-C'})  # Grafo somente com paralelas
+        self.g19 = Grafo(('A', 'B', 'C'), {'a1': 'A-B', 'a2': 'A-C'})  # Arvore simples
+        self.g20 = Grafo(('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'),
+                    {'a1': 'A-B', 'a2': 'A-C', 'a3': 'D-E', 'a4': 'E-F', 'a5': 'F-G', 'a6': 'G-D',
+                     'a7': 'A-H'})  # NÃO CONEXO COM CICLO EM UM SUB GRAFO
+        self.g21 = Grafo(('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'),
+                    {'a1': 'A-B', 'a2': 'A-C', 'a3': 'D-E', 'a4': 'E-F', 'a5': 'F-G', 'a7': 'A-H', 'a8': 'I-J',
+                     'a9': 'J-K',
+                     'a10': 'K-I'})  # NÃO CONEXO EM 2 SUBGRAFOS E COM CICLO EM UM SUB GRAFO
+
     def test_vertices_nao_adjacentes(self):
         self.assertEqual(self.g_p.vertices_nao_adjacentes(),
                          ['J-J', 'J-E', 'J-P', 'J-M', 'J-T', 'J-Z', 'C-C', 'C-Z', 'E-J', 'E-E', 'E-P', 'E-M', 'E-T',
@@ -170,5 +188,26 @@ class TestGrafo(unittest.TestCase):
         self.assertEqual(set(self.g12.dfs('L')), {'L', '3', 'J', '2', 'H', '1', 'K'})
         self.assertEqual(set(self.g13.dfs('V2')),
                          {'V2', 'a1', 'V1', 'a4', 'V4', 'a3', 'V3'})
-        self.assertEqual(set(self.g14.dfs('V4')),
-                         {'V4', 'a3', 'V3', 'a2', 'V2', 'a1', 'V1', 'a5', 'V5'})
+        self.assertEqual(set(self.g14.dfs('V4')),{'V4', 'a3', 'V3', 'a2', 'V2', 'a1', 'V1', 'a5', 'V5'})
+
+    def test_ha_ciclo(self):
+        self.assertEqual(set(self.g_p.ha_ciclo()), {'C', 'a2', 'E', 'a3', 'C'})
+        self.assertEqual(set(self.g2.ha_ciclo()), {'A', '1', 'B', '11', 'F', '10', 'H', '9', 'G', '2', 'A'})
+        self.assertEqual(set(self.g3.ha_ciclo()), {'B', '2', 'B'})
+        self.assertEqual(set(self.g4.ha_ciclo()), {'A', 'a1', 'B', 'a2', 'C', 'a3', 'A'})
+        self.assertEqual(set(self.g5.ha_ciclo()), {'A', 'a1', 'B', 'a2', 'C', 'a3', 'A'})
+        self.assertEqual(set(self.g6.ha_ciclo()), {'A', 'a1', 'D', 'a3', 'B', 'a4', 'E', 'a2', 'A'})
+        self.assertEqual(set(self.g7.ha_ciclo()), {'G', 'a8', 'F', 'a9', 'G'})
+        self.assertEqual(set(self.g15.ha_ciclo()), {'A', 'a1', 'B', 'a2', 'C', 'a3', 'A'})
+        self.assertEqual(set(self.g17.ha_ciclo()), {'A', 'a1', 'B', 'a2', 'C', 'a3', 'A'})
+        self.assertEqual(set(self.g18.ha_ciclo()), {'A', 'a1', 'B', 'a2', 'A'})
+        self.assertEqual(set(self.g20.ha_ciclo()), {'D', 'a3', 'E', 'a4', 'F', 'a5', 'G', 'a6', 'D'})
+        self.assertEqual(set(self.g21.ha_ciclo()), {'I', 'a8', 'J', 'a9', 'K', 'a10', 'I'})
+
+    def test_conexo(self):
+        self.assertTrue(self.g1.conexo())
+        self.assertTrue(self.g2.conexo())
+        self.assertFalse(self.g20.conexo())
+        self.assertFalse(self.g21.conexo())
+
+
