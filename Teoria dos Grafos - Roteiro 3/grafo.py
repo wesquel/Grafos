@@ -5,8 +5,8 @@ class VerticeInvalidoException(Exception):
 class ArestaInvalidaException(Exception):
     pass
 
-
 class Grafo:
+
     QTDE_MAX_SEPARADOR = 1
     SEPARADOR_ARESTA = '-'
 
@@ -261,22 +261,53 @@ class Grafo:
         return True
 
     def caminho(self, n):
-        if n == 0:
-            return []
+        caminhoF = []
         for x in self.N:
-            dfs = self.dfs(x)
             caminho = []
-            caminho.append(dfs[0])
-            for i in range(len(dfs)-2):
-                if i % 2 == 0:
-                    if dfs[i+1] in self.arestas_entre_vertices(dfs[i] + "-" + dfs[i+2]):
-                        caminho.append(dfs[i+1])
-                        caminho.append(dfs[i+2])
-                    else:
-                        break
-            if len(caminho) >= n * 2 + 1:
-                return caminho[:n*2+1]
-        return -1
+            caminho2 = []
+            dic = self.pegar_vizinhos()
+            caminho.append(x)
+            camin = self.percorrer_caminho(x,caminho,caminho2,dic)
+            if len(camin) > len(caminhoF):
+                caminhoF = camin
+        if n == 0:
+            return False
+        elif len(caminhoF) >= n*2+1:
+            return caminhoF[:n*2+1]
+        else:
+            if int((len(caminhoF)-1)/2) == 0:
+                print('Não é possivel fazer um caminho.')
+            else:
+                print('O maximo permitido é',int((len(caminhoF)-1)/2))
+            return False
+
+    def percorrer_caminho(self,vertice,caminho,caminho2,dic):
+        Lvizinho = self.vizinhos_do_vertice(vertice)
+        for f in range(len(dic)):
+            if dic[f][0] == vertice:
+                for x in range(len(Lvizinho)):
+                    if Lvizinho[x] not in caminho and Lvizinho[x] not in dic[f][1]:
+                        vizinho = Lvizinho[x]
+                        dic[f][1].append(vizinho)
+                        caminho.append(self.arestas_entre_vertices(vertice+'-'+vizinho)[0])
+                        caminho.append(vizinho)
+                        return self.percorrer_caminho(vizinho,caminho,caminho2,dic)
+        if len(caminho) >= len(caminho2):
+            caminho2 = caminho
+        if len(caminho) == 1:
+            return caminho2
+        for f2 in range(len(dic)):
+            if dic[f2][0] == caminho[-1] and len(dic[f2][1]) > 0:
+                for f3 in range(len(dic[f2][1])):
+                    dic[f2][1].pop()
+        return self.percorrer_caminho(caminho[-3], caminho[:len(caminho)-2], caminho2, dic)
+
+
+    def pegar_vizinhos(self):
+        dic = {}
+        for x in self.N:
+            dic[x] = []
+        return list(dic.items())
 
     def ha_ciclo(grafo):
         visitados = []
