@@ -260,4 +260,7 @@ class TestGrafo(unittest.TestCase):
                          ['A', 'L', 'O', 'Q', 'S', 'T', 'X', 'c', 'd', 'J', 'a'])
         self.assertEqual(self.g_D1.dijkstra('A', 'a', ['G', 'I'], 5,5),
                          ['A', 'B', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'a'])
-        self.assertEqual(self.g_p.dijkstra('J', 'Z', ['M'], 2,2), ['J', 'C', 'M', 'T', 'Z'])
+        self.assertEqual(self.g_p.dijkstra('J', 'Z', ['M'], 2, 2), ['J', 'C', 'M', 'T', 'Z'])
+        self.assertEqual(self.g_7.dijkstra('A', 'E', ['D'], 1, 2), ['A', 'D', 'B', 'E'])
+        self.assertEqual(self.g_4.dijkstra('F', 'B', ['C'], 1, 2), ['F', 'C', 'A', 'B'])
+        self.assertEqual(self.g_1.dijkstra('B', 'G', ['A', 'D'], 1, 2), ['B', 'A', 'C', 'E', 'G'])
